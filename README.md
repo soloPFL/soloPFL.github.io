@@ -1,1 +1,1 @@
-# soloPFL.github.io
+# soloPFL's How-To page
