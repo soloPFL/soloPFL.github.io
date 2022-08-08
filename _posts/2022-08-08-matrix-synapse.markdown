@@ -5,7 +5,7 @@ date:   2022-08-08
 categories: servers
 ---
 
-#1. Install Docker
+# 1. Install Docker
 
 {% highlight ruby %}
 sudo apt update
@@ -26,7 +26,7 @@ sudo apt install docker-compose -y
 
 {% endhighlight %}
 
-#2 Install NGinX Proxy Manager
+# 2. Install NGinX Proxy Manager
 
 Start in a home folder eg. /home/user1/ 
 
@@ -80,6 +80,53 @@ Now Browse to port 81. It's the npm admin web interface
 default user: admin@example.com
 default password: changeme
 {% endhighlight %}
+
+# 3. Installing Matrix Synapse 
+
+## Generating config files
+
+{% highlight ruby %}
+docker run -it --rm --mount type=volume,src=synapse-data,dst=/data -e SYNAPSE_SERVER_NAME=<your-intended-url> -e SYNAPSE_REPORT_STATS=no matrixdotorg/synapse:latest generate
+{% endhighlight %}
+
+Insert your URL <......>
+
+The config file will be here:
+'/var/lib/docker/volumes/synapse-data/_data/homeserver.yaml'
+Settings to look at: enable_registration and SMTP
+
+## Start the server
+
+Map port 443 to a different one. (eg. 4443) The reverse proxy will use 443. 
+
+{% highlight ruby %}
+docker run -d --name synapse --mount type=volume,src=synapse-data,dst=/data -p 8008:8008 -p 4443:443 matrixdotorg/synapse:latest
+{% endhighlight %}
+
+check:
+'docker logs synapse'
+
+Now Browse to port 8008 -> you should see a simple page saying Matrix is running.
+
+# 4. Get encryption (SSL) from let's encrypt and config. reverse proxy
+
+Lookup internal Docker IP eg. 172.x.x.x
+'ip addr show docker0'
+
+NGinX Proxy Manager>>> new proxy host>>> use the 172.x.x.x ip.
+
+Enable Cache Assets, Block Common Explits, and Websockets Support. 
+SAVE
+Now edit the new host and add a Custom Location. 
+Enter your URL (host name) in "Definte Location"
+"Scheme" = https
+IP Adress field = the 172.x.x.x from above.
+Port = 4443 from above.
+Now requst the SSL Cert and enable "Force SSL"
+no errors when saving? cool
+
+# 5 Register an admin account on Synapse
+
 
 
 # WORK in progress
