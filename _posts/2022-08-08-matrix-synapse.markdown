@@ -128,7 +128,7 @@ no errors when saving? cool
 # 5 Register an admin account on Synapse
 
 {% highlight ruby %}
-docker exec -it matrix-synapse register_new_matrix_user http://DNSorIP:8008 -c /data/homeserver.yaml
+docker exec -it synapse register_new_matrix_user http://DNSorIP:8008 -c /data/homeserver.yaml
 {% endhighlight %}
 
 # WORK in progress
