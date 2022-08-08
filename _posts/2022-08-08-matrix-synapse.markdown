@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Setup Matrix Synapse on Ubuntu 20.4"
-date:   2022-08-08 18:11:15 +0200
+date:   2022-08-08
 categories: servers
 ---
 
