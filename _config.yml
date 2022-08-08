@@ -30,7 +30,7 @@ twitter_username: soloPFL
 github_username:  soloPFL
 
 # Build settings
-theme: jekyll-theme-hacker
+theme: minima
 plugins:
   - jekyll-feed
 
