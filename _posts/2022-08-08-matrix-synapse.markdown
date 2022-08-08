@@ -100,7 +100,7 @@ Settings to look at: enable_registration and SMTP
 Map port 443 to a different one. (eg. 4443) The reverse proxy will use 443. 
 
 {% highlight ruby %}
-docker run -d --name synapse --mount type=volume,src=synapse-data,dst=/data -p 8008:8008 -p 4443:443 matrixdotorg/synapse:latest
+docker run -d --name synapse --mount type=volume,src=synapse-data,dst=/data -p 8008:8008 -p 4443:443 --restart=unless-stopped matrixdotorg/synapse:latest
 {% endhighlight %}
 
 check:
@@ -127,6 +127,8 @@ no errors when saving? cool
 
 # 5 Register an admin account on Synapse
 
-
+{% highlight ruby %}
+docker exec -it matrix-synapse register_new_matrix_user http://DNSorIP:8008 -c /data/homeserver.yaml
+{% endhighlight %}
 
 # WORK in progress
