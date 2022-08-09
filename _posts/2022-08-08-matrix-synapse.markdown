@@ -95,12 +95,18 @@ The config file will be here:
 '/var/lib/docker/volumes/synapse-data/_data/homeserver.yaml'
 Settings to look at: enable_registration and SMTP
 
+set the following for federation 
+{% highlight ruby %}
+serve_server_wellknown: true
+{% endhighlight %}
+If this is not set federation doesn't work.
+
 ## Start the server
 
 Map port 443 to a different one. (eg. 4443) The reverse proxy will use 443. 
 
 {% highlight ruby %}
-docker run -d --name synapse --mount type=volume,src=synapse-data,dst=/data -p 8008:8008 -p 4443:443 -p 8448:8448 --restart=unless-stopped matrixdotorg/synapse:latest
+docker run -d --name synapse --mount type=volume,src=synapse-data,dst=/data -p 8008:8008 -p 4443:443 --restart=unless-stopped matrixdotorg/synapse:latest
 {% endhighlight %}
 
 check:
