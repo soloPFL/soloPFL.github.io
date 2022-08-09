@@ -175,6 +175,12 @@ sudo ufw reload
 
 Now UFW is blocking ports opened by Docker.
 Now add UFW rules to open port 80 and 443 to the Proxy Docker
+Like this:
+{% highlight ruby %}
+ufw route allow proto tcp from any to 172.x.x.x port 80
+ufw route allow proto tcp from any to 172.x.x.x port 443 
+{% endhighlight %}
+172.x.x.x = internal IP of the Docker Container running the Proxy. 
 
 
 # WORK in progress
