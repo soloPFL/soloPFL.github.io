@@ -100,7 +100,7 @@ Settings to look at: enable_registration and SMTP
 Map port 443 to a different one. (eg. 4443) The reverse proxy will use 443. 
 
 {% highlight ruby %}
-docker run -d --name synapse --mount type=volume,src=synapse-data,dst=/data -p 8008:8008 -p 4443:443 --restart=unless-stopped matrixdotorg/synapse:latest
+docker run -d --name synapse --mount type=volume,src=synapse-data,dst=/data -p 8008:8008 -p 4443:443 -p 8448:8448 --restart=unless-stopped matrixdotorg/synapse:latest
 {% endhighlight %}
 
 check:
@@ -130,5 +130,45 @@ no errors when saving? cool
 {% highlight ruby %}
 docker exec -it synapse register_new_matrix_user http://DNSorIP:8008 -c /data/homeserver.yaml
 {% endhighlight %}
+
+## Solving UFW and Docker issues
+
+add the following at the end of:  /etc/ufw/after.rules
+
+{% highlight ruby %}
+# BEGIN UFW AND DOCKER
+*filter
+:ufw-user-forward - [0:0]
+:ufw-docker-logging-deny - [0:0]
+:DOCKER-USER - [0:0]
+-A DOCKER-USER -j ufw-user-forward
+
+-A DOCKER-USER -j RETURN -s 10.0.0.0/8
+-A DOCKER-USER -j RETURN -s 172.16.0.0/12
+-A DOCKER-USER -j RETURN -s 192.168.0.0/16
+
+-A DOCKER-USER -p udp -m udp --sport 53 --dport 1024:65535 -j RETURN
+
+-A DOCKER-USER -j ufw-docker-logging-deny -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -d 192.168.0.0/16
+-A DOCKER-USER -j ufw-docker-logging-deny -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -d 10.0.0.0/8
+-A DOCKER-USER -j ufw-docker-logging-deny -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -d 172.16.0.0/12
+-A DOCKER-USER -j ufw-docker-logging-deny -p udp -m udp --dport 0:32767 -d 192.168.0.0/16
+-A DOCKER-USER -j ufw-docker-logging-deny -p udp -m udp --dport 0:32767 -d 10.0.0.0/8
+-A DOCKER-USER -j ufw-docker-logging-deny -p udp -m udp --dport 0:32767 -d 172.16.0.0/12
+
+-A DOCKER-USER -j RETURN
+
+-A ufw-docker-logging-deny -m limit --limit 3/min --limit-burst 10 -j LOG --log-prefix "[UFW DOCKER BLOCK] "
+-A ufw-docker-logging-deny -j DROP
+
+COMMIT
+# END UFW AND DOCKER
+{% endhighlight %}
+
+sudo ufw reload
+
+Now UFW is blocking ports opened by Docker.
+Now add UFW rules to open port 80 and 443 to the Proxy Docker
+
 
 # WORK in progress
