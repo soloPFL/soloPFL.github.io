@@ -183,4 +183,4 @@ ufw route allow proto tcp from any to 172.x.x.x port 443
 172.x.x.x = internal IP of the Docker Container running the Proxy. 
 
 
-# WORK in progress
+# WORK in progress but it should work like this.
