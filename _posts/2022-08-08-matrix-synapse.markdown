@@ -182,5 +182,18 @@ ufw route allow proto tcp from any to 172.x.x.x port 443
 {% endhighlight %}
 172.x.x.x = internal IP of the Docker Container running the Proxy. 
 
+## Adding a TURN-Server to homeserver.yaml
+
+Quote example from: https://matrix-org.github.io/synapse/latest/turn-howto.html
+### Add your own server-values if you run your own eg. coTURN.
+{% highlight ruby %}
+turn_uris: [ "turn:turn.matrix.org?transport=udp", "turn:turn.matrix.org?transport=tcp" ]
+turn_shared_secret: "n0t4ctuAllymatr1Xd0TorgSshar3d5ecret4obvIousreAsons"
+turn_user_lifetime: 86400000
+turn_allow_guests: True
+{% endhighlight %}
+
+Now restart the docker container.
+
 
 # WORK in progress but it should work like this.

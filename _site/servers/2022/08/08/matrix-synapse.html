@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Setup Matrix Synapse on Ubuntu 20.4 | SoloPFL’s How-To Page</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Setup Matrix Synapse on Ubuntu 20.4" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="1. Install Docker" />
+<meta property="og:description" content="1. Install Docker" />
+<link rel="canonical" href="http://localhost:4000/servers/2022/08/08/matrix-synapse.html" />
+<meta property="og:url" content="http://localhost:4000/servers/2022/08/08/matrix-synapse.html" />
+<meta property="og:site_name" content="SoloPFL’s How-To Page" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-08T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Setup Matrix Synapse on Ubuntu 20.4" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-08-08T00:00:00+02:00","datePublished":"2022-08-08T00:00:00+02:00","description":"1. Install Docker","headline":"Setup Matrix Synapse on Ubuntu 20.4","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/servers/2022/08/08/matrix-synapse.html"},"url":"http://localhost:4000/servers/2022/08/08/matrix-synapse.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="SoloPFL's How-To Page" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">SoloPFL&#39;s How-To Page</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Setup Matrix Synapse on Ubuntu 20.4</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2022-08-08T00:00:00+02:00" itemprop="datePublished">Aug 8, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="1-install-docker">1. Install Docker</h1>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">sudo</span> <span class="n">apt</span> <span class="n">update</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">apt</span><span class="o">-</span><span class="n">transport</span><span class="o">-</span><span class="n">https</span> <span class="n">ca</span><span class="o">-</span><span class="n">certificates</span> <span class="n">curl</span> <span class="n">software</span><span class="o">-</span><span class="n">properties</span><span class="o">-</span><span class="n">common</span> <span class="o">-</span><span class="n">y</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">fsSL</span> <span class="n">https</span><span class="ss">:/</span><span class="o">/</span><span class="n">download</span><span class="p">.</span><span class="nf">docker</span><span class="p">.</span><span class="nf">com</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">/</span><span class="n">gpg</span> <span class="o">|</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">key</span> <span class="n">add</span> <span class="o">-</span>
+
+<span class="n">sudo</span> <span class="n">add</span><span class="o">-</span><span class="n">apt</span><span class="o">-</span><span class="n">repository</span> <span class="s2">"deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"</span>
+
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">update</span>
+<span class="n">apt</span><span class="o">-</span><span class="n">cache</span> <span class="n">policy</span> <span class="n">docker</span><span class="o">-</span><span class="n">ce</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">docker</span><span class="o">-</span><span class="n">ce</span> <span class="o">-</span><span class="n">y</span>
+
+<span class="c1">## now set user as part of docker group</span>
+<span class="n">sudo</span> <span class="n">usermod</span> <span class="o">-</span><span class="n">aG</span> <span class="n">docker</span> <span class="err">$</span><span class="p">{</span><span class="no">USER</span><span class="p">}</span>
+
+<span class="c1">## install docker-compose</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">y</span></code></pre></figure>
+
+<h1 id="2-install-nginx-proxy-manager">2. Install NGinX Proxy Manager</h1>
+
+<p>Start in a home folder eg. /home/user1/</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">mkdir</span> <span class="n">npm</span>
+<span class="n">cd</span> <span class="n">npm</span>
+<span class="n">nano</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="p">.</span><span class="nf">yml</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">version: </span><span class="s1">'3'</span>
+<span class="ss">services:
+  app:
+    image: </span><span class="s1">'jc21/nginx-proxy-manager:latest'</span>
+    <span class="ss">ports:
+      </span><span class="o">-</span> <span class="s1">'80:80'</span>
+      <span class="o">-</span> <span class="s1">'81:81'</span>
+      <span class="o">-</span> <span class="s1">'443:443'</span>
+    <span class="ss">environment:
+      </span><span class="no">DB_MYSQL_HOST</span><span class="p">:</span> <span class="s2">"db"</span>
+      <span class="no">DB_MYSQL_PORT</span><span class="p">:</span> <span class="mi">3306</span>
+      <span class="no">DB_MYSQL_USER</span><span class="p">:</span> <span class="s2">"&lt;a user name you want&gt;"</span>
+      <span class="no">DB_MYSQL_PASSWORD</span><span class="p">:</span> <span class="s2">"&lt;a password you want&gt;"</span>
+      <span class="no">DB_MYSQL_NAME</span><span class="p">:</span> <span class="s2">"npm"</span>
+    <span class="ss">volumes:
+      </span><span class="o">-</span> <span class="p">.</span><span class="nf">/</span><span class="n">data</span><span class="ss">:/</span><span class="n">data</span>
+      <span class="o">-</span> <span class="p">.</span><span class="nf">/</span><span class="n">letsencrypt</span><span class="ss">:/</span><span class="n">etc</span><span class="o">/</span><span class="n">letsencrypt</span>
+  <span class="ss">db:
+    image: </span><span class="s1">'jc21/mariadb-aria:10.4'</span>
+    <span class="ss">environment:
+      </span><span class="no">MYSQL_ROOT_PASSWORD</span><span class="p">:</span> <span class="s1">'&lt;a long, strong password you want&gt;'</span>
+      <span class="no">MYSQL_DATABASE</span><span class="p">:</span> <span class="s1">'npm'</span>
+      <span class="no">MYSQL_USER</span><span class="p">:</span> <span class="s1">'&lt;the same username as above&gt;'</span>
+      <span class="no">MYSQL_PASSWORD</span><span class="p">:</span> <span class="s1">'&lt;the same password as in the section above&gt;'</span>
+    <span class="ss">volumes:
+      </span><span class="o">-</span> <span class="p">.</span><span class="nf">/</span><span class="n">data</span><span class="o">/</span><span class="n">mysql</span><span class="ss">:/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span></code></pre></figure>
+
+<p>SAVE and exit (contr-X)
+Start the Proxy Manager:</p>
+
+<p>docker-compose  up -d</p>
+
+<p>Attention: if you use UFW Docker will ignore the rules you set and open port 443, 80 and <b>81</b></p>
+
+<p>I found a fix for that. More later….</p>
+
+<p>Now Browse to port 81. It’s the npm admin web interface</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">default</span> <span class="ss">user: </span><span class="n">admin</span><span class="vi">@example</span><span class="p">.</span><span class="nf">com</span>
+<span class="n">default</span> <span class="ss">password: </span><span class="n">changeme</span></code></pre></figure>
+
+<h1 id="3-installing-matrix-synapse">3. Installing Matrix Synapse</h1>
+
+<h2 id="generating-config-files">Generating config files</h2>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="o">--</span><span class="n">rm</span> <span class="o">--</span><span class="n">mount</span> <span class="n">type</span><span class="o">=</span><span class="n">volume</span><span class="p">,</span><span class="n">src</span><span class="o">=</span><span class="n">synapse</span><span class="o">-</span><span class="n">data</span><span class="p">,</span><span class="n">dst</span><span class="o">=</span><span class="sr">/data -e SYNAPSE_SERVER_NAME=&lt;your-intended-url&gt; -e SYNAPSE_REPORT_STATS=no matrixdotorg/s</span><span class="n">ynapse</span><span class="ss">:latest</span> <span class="n">generate</span></code></pre></figure>
+
+<p>Insert your URL &lt;……&gt;</p>
+
+<p>The config file will be here:
+‘/var/lib/docker/volumes/synapse-data/_data/homeserver.yaml’
+Settings to look at: enable_registration and SMTP</p>
+
+<p>set the following for federation</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">serve_server_wellknown: </span><span class="kp">true</span></code></pre></figure>
+
+<p>If this is not set federation doesn’t work.</p>
+
+<h2 id="start-the-server">Start the server</h2>
+
+<p>Map port 443 to a different one. (eg. 4443) The reverse proxy will use 443.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="nb">name</span> <span class="n">synapse</span> <span class="o">--</span><span class="n">mount</span> <span class="n">type</span><span class="o">=</span><span class="n">volume</span><span class="p">,</span><span class="n">src</span><span class="o">=</span><span class="n">synapse</span><span class="o">-</span><span class="n">data</span><span class="p">,</span><span class="n">dst</span><span class="o">=</span><span class="sr">/data -p 8008:8008 -p 4443:443 --restart=unless-stopped matrixdotorg/s</span><span class="n">ynapse</span><span class="ss">:latest</span></code></pre></figure>
+
+<p>check:
+‘docker logs synapse’</p>
+
+<p>Now Browse to port 8008 -&gt; you should see a simple page saying Matrix is running.</p>
+
+<h1 id="4-get-encryption-ssl-from-lets-encrypt-and-config-reverse-proxy">4. Get encryption (SSL) from let’s encrypt and config. reverse proxy</h1>
+
+<p>Lookup internal Docker IP eg. 172.x.x.x
+‘ip addr show docker0’</p>
+
+<p>NGinX Proxy Manager»&gt; new proxy host»&gt; use the 172.x.x.x ip.</p>
+
+<p>Enable Cache Assets, Block Common Explits, and Websockets Support. 
+SAVE
+Now edit the new host and add a Custom Location. 
+Enter your URL (host name) in “Definte Location”
+“Scheme” = https
+IP Adress field = the 172.x.x.x from above.
+Port = 4443 from above.
+Now requst the SSL Cert and enable “Force SSL”
+no errors when saving? cool</p>
+
+<h1 id="5-register-an-admin-account-on-synapse">5 Register an admin account on Synapse</h1>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">docker</span> <span class="nb">exec</span> <span class="o">-</span><span class="n">it</span> <span class="n">synapse</span> <span class="n">register_new_matrix_user</span> <span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="no">DNSorIP</span><span class="p">:</span><span class="mi">8008</span> <span class="o">-</span><span class="n">c</span> <span class="sr">/data/</span><span class="n">homeserver</span><span class="p">.</span><span class="nf">yaml</span></code></pre></figure>
+
+<h2 id="solving-ufw-and-docker-issues">Solving UFW and Docker issues</h2>
+
+<p>add the following at the end of:  /etc/ufw/after.rules</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># BEGIN UFW AND DOCKER</span>
+<span class="o">*</span><span class="n">filter</span>
+<span class="ss">:ufw</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">forward</span> <span class="o">-</span> <span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>
+<span class="ss">:ufw</span><span class="o">-</span><span class="n">docker</span><span class="o">-</span><span class="n">logging</span><span class="o">-</span><span class="n">deny</span> <span class="o">-</span> <span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>
+<span class="ss">:DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span> <span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="n">ufw</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">forward</span>
+
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="no">RETURN</span> <span class="o">-</span><span class="n">s</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">8</span>
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="no">RETURN</span> <span class="o">-</span><span class="n">s</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">12</span>
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="no">RETURN</span> <span class="o">-</span><span class="n">s</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">16</span>
+
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="nb">p</span> <span class="n">udp</span> <span class="o">-</span><span class="n">m</span> <span class="n">udp</span> <span class="o">--</span><span class="n">sport</span> <span class="mi">53</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">1024</span><span class="p">:</span><span class="mi">65535</span> <span class="o">-</span><span class="n">j</span> <span class="no">RETURN</span>
+
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="n">ufw</span><span class="o">-</span><span class="n">docker</span><span class="o">-</span><span class="n">logging</span><span class="o">-</span><span class="n">deny</span> <span class="o">-</span><span class="nb">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">m</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">tcp</span><span class="o">-</span><span class="n">flags</span> <span class="no">FIN</span><span class="p">,</span><span class="no">SYN</span><span class="p">,</span><span class="no">RST</span><span class="p">,</span><span class="no">ACK</span> <span class="no">SYN</span> <span class="o">-</span><span class="n">d</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">16</span>
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="n">ufw</span><span class="o">-</span><span class="n">docker</span><span class="o">-</span><span class="n">logging</span><span class="o">-</span><span class="n">deny</span> <span class="o">-</span><span class="nb">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">m</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">tcp</span><span class="o">-</span><span class="n">flags</span> <span class="no">FIN</span><span class="p">,</span><span class="no">SYN</span><span class="p">,</span><span class="no">RST</span><span class="p">,</span><span class="no">ACK</span> <span class="no">SYN</span> <span class="o">-</span><span class="n">d</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">8</span>
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="n">ufw</span><span class="o">-</span><span class="n">docker</span><span class="o">-</span><span class="n">logging</span><span class="o">-</span><span class="n">deny</span> <span class="o">-</span><span class="nb">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">m</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">tcp</span><span class="o">-</span><span class="n">flags</span> <span class="no">FIN</span><span class="p">,</span><span class="no">SYN</span><span class="p">,</span><span class="no">RST</span><span class="p">,</span><span class="no">ACK</span> <span class="no">SYN</span> <span class="o">-</span><span class="n">d</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">12</span>
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="n">ufw</span><span class="o">-</span><span class="n">docker</span><span class="o">-</span><span class="n">logging</span><span class="o">-</span><span class="n">deny</span> <span class="o">-</span><span class="nb">p</span> <span class="n">udp</span> <span class="o">-</span><span class="n">m</span> <span class="n">udp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">0</span><span class="p">:</span><span class="mi">32767</span> <span class="o">-</span><span class="n">d</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">16</span>
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="n">ufw</span><span class="o">-</span><span class="n">docker</span><span class="o">-</span><span class="n">logging</span><span class="o">-</span><span class="n">deny</span> <span class="o">-</span><span class="nb">p</span> <span class="n">udp</span> <span class="o">-</span><span class="n">m</span> <span class="n">udp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">0</span><span class="p">:</span><span class="mi">32767</span> <span class="o">-</span><span class="n">d</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">8</span>
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="n">ufw</span><span class="o">-</span><span class="n">docker</span><span class="o">-</span><span class="n">logging</span><span class="o">-</span><span class="n">deny</span> <span class="o">-</span><span class="nb">p</span> <span class="n">udp</span> <span class="o">-</span><span class="n">m</span> <span class="n">udp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">0</span><span class="p">:</span><span class="mi">32767</span> <span class="o">-</span><span class="n">d</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">12</span>
+
+<span class="o">-</span><span class="no">A</span> <span class="no">DOCKER</span><span class="o">-</span><span class="no">USER</span> <span class="o">-</span><span class="n">j</span> <span class="no">RETURN</span>
+
+<span class="o">-</span><span class="no">A</span> <span class="n">ufw</span><span class="o">-</span><span class="n">docker</span><span class="o">-</span><span class="n">logging</span><span class="o">-</span><span class="n">deny</span> <span class="o">-</span><span class="n">m</span> <span class="n">limit</span> <span class="o">--</span><span class="n">limit</span> <span class="mi">3</span><span class="o">/</span><span class="n">min</span> <span class="o">--</span><span class="n">limit</span><span class="o">-</span><span class="n">burst</span> <span class="mi">10</span> <span class="o">-</span><span class="n">j</span> <span class="no">LOG</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">prefix</span> <span class="s2">"[UFW DOCKER BLOCK] "</span>
+<span class="o">-</span><span class="no">A</span> <span class="n">ufw</span><span class="o">-</span><span class="n">docker</span><span class="o">-</span><span class="n">logging</span><span class="o">-</span><span class="n">deny</span> <span class="o">-</span><span class="n">j</span> <span class="no">DROP</span>
+
+<span class="no">COMMIT</span>
+<span class="c1"># END UFW AND DOCKER</span></code></pre></figure>
+
+<p>sudo ufw reload</p>
+
+<p>Now UFW is blocking ports opened by Docker.
+Now add UFW rules to open port 80 and 443 to the Proxy Docker
+Like this:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">ufw</span> <span class="n">route</span> <span class="n">allow</span> <span class="n">proto</span> <span class="n">tcp</span> <span class="n">from</span> <span class="n">any</span> <span class="n">to</span> <span class="mi">172</span><span class="p">.</span><span class="nf">x</span><span class="p">.</span><span class="nf">x</span><span class="p">.</span><span class="nf">x</span> <span class="n">port</span> <span class="mi">80</span>
+<span class="n">ufw</span> <span class="n">route</span> <span class="n">allow</span> <span class="n">proto</span> <span class="n">tcp</span> <span class="n">from</span> <span class="n">any</span> <span class="n">to</span> <span class="mi">172</span><span class="p">.</span><span class="nf">x</span><span class="p">.</span><span class="nf">x</span><span class="p">.</span><span class="nf">x</span> <span class="n">port</span> <span class="mi">443</span> </code></pre></figure>
+
+<p>172.x.x.x = internal IP of the Docker Container running the Proxy.</p>
+
+<h1 id="work-in-progress-but-it-should-work-like-this">WORK in progress but it should work like this.</h1>
+
+  </div><a class="u-url" href="/servers/2022/08/08/matrix-synapse.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">SoloPFL&#39;s How-To Page</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">SoloPFL&#39;s How-To Page</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/soloPFL"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">soloPFL</span></a></li><li><a href="https://www.twitter.com/soloPFL"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">soloPFL</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Collection of code to get things running</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
