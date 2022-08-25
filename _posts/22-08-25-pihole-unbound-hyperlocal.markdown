@@ -12,14 +12,31 @@ curl -sSL https://install.pi-hole.net | bash
 {% endhighlight %}
 
 # Install unbound
+
 {% highlight ruby %}
 sudo apt install unbound
 {% endhighlight %}
 
-# Download the unbound config
+# Download the unbound config and creat other configs
 
 {% highlight ruby %}
-wget 
+wget -O /etc/unbound/unbound.conf.d/pi-hole.conf https://raw.githubusercontent.com/soloPFL/soloPFL.github.io/main/files/pi-hole.conf-unbound
 {% endhighlight %}
+
+{% highlight ruby %}
+touch /etc/dnsmasq.d/99-edns.conf
+echo 'edns-packet-max=1232' >> /etc/dnsmasq.d/99-edns.conf
+{% endhighlight %}
+{% highlight ruby %}
+sudo service unbound restart
+{% endhighlight %}
+
+# Configure Pi-Hole to use unbound 
+
+{% highlight ruby %}
+127.0.0.1#5335 
+{% endhighlight %}
+
+Use this as Custom DNS (IPv4)
 
 # Work in Progress 
