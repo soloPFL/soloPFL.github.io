@@ -21,6 +21,8 @@ chmod +x install-unbound-hyperlocal-pihole.sh
 sudo ./install-unbound-hyperlocal-pihole.sh
 {% endhighlight %}
 
+
+# Step by step
 # Install Pi-Hole
 
 {% highlight ruby %}
