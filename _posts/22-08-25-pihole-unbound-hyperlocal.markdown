@@ -5,6 +5,22 @@ date:   2022-08-25
 categories: servers
 ---
 
+# Fast way to do this:
+
+## Install Pi-Hole first
+
+{% highlight ruby %}
+curl -sSL https://install.pi-hole.net | bash
+{% endhighlight %}
+
+## Then install and configure unbound
+
+{% highlight ruby %}
+wget https://raw.githubusercontent.com/soloPFL/soloPFL.github.io/main/files/install-unbound-hyperlocal-pihole.sh
+chmod +x install-unbound-hyperlocal-pihole.sh
+sudo ./install-unbound-hyperlocal-pihole.sh
+{% endhighlight %}
+
 # Install Pi-Hole
 
 {% highlight ruby %}
