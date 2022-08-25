@@ -20,7 +20,7 @@ sudo apt install unbound
 # Download the unbound config and creat other configs
 
 {% highlight ruby %}
-wget -O /etc/unbound/unbound.conf.d/pi-hole.conf https://raw.githubusercontent.com/soloPFL/soloPFL.github.io/main/files/pi-hole.conf-unbound
+wget -P /etc/unbound/unbound.conf.d/ -O pi-hole.conf https://raw.githubusercontent.com/soloPFL/soloPFL.github.io/main/files/pi-hole.conf-unbound
 {% endhighlight %}
 
 {% highlight ruby %}
