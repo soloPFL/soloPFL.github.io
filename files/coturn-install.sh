@@ -12,8 +12,8 @@ echo "TURNSERVER_ENABLED=1" >> /etc/default/coturn
 mv /etc/turnserver.conf /etc/turnserver.conf.original
 
 
-wget -c URL  -O turnserver.conf
+wget -c https://raw.githubusercontent.com/soloPFL/soloPFL.github.io/main/files/turnserver-clean.conf -O turnserver.conf
 cat ./turnserver.conf
 echo "moving this file to /etc/turnserver.conf now... "
 mv ./turnserver.conf /etc/turnserver.conf
-nano /etc/turnserver.conf
+
