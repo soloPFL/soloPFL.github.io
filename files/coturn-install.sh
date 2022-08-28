@@ -1,4 +1,8 @@
 #! /bin/bash
+
+
+
+
 apt-get -y update
 apt-get -y install coturn
 
@@ -17,5 +21,18 @@ cat ./turnserver.conf
 echo "moving this file to /etc/turnserver.conf now... "
 mv ./turnserver.conf /etc/turnserver.conf
 
-sed -i 's/[your-password]/theunbelievablepassword/' /etc/turnserver.conf
-sed -i 's/[your-server-address]/theunbelievableserveraddress/' /etc/turnserver.conf
+
+read -p 'Input a shared secret aka password : ' pwdinput
+read -p 'Input you hostname aka realm : ' hostinput
+password=$pwdinput
+host=$hostinput
+
+
+sed -i 's/[your-password]/$password/' /etc/turnserver.conf
+sed -i 's/[your-server-address]/$host/' /etc/turnserver.conf
+
+#Start the server
+
+service coturn restart
+sleep 3
+service coturn status
