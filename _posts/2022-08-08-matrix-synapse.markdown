@@ -127,7 +127,7 @@ Now edit the new host and add a Custom Location.
 Enter your URL (host name) in "Definte Location"
 "Scheme" = https
 IP Adress field = the 172.x.x.x from above.
-Port = 4443 from above.
+Port = 8008 from above.
 Now requst the SSL Cert and enable "Force SSL"
 no errors when saving? cool
 
