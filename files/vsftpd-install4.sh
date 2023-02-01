@@ -28,7 +28,7 @@ else
     sudo echo "userlist_deny=NO" >> /etc/vsftpd.conf
 
     # Create the shared folder and set permissions
-    sudo mkdir /var/ftp/shared
+    sudo mkdir -p /var/ftp/shared
     sudo chmod 775 /var/ftp/shared
 fi
 
