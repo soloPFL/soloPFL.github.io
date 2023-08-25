@@ -4,7 +4,7 @@
 YOUR_DOMAIN="example.com"
 
 # Get the script's directory
-SCRIPT_DIR=$(pwd)
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 SCRIPT_NAME=$(basename "$0")
 
 # Define log file path
@@ -28,7 +28,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 CRONTAB_ENTRY="0 2 * * * $SCRIPT_DIR/$SCRIPT_NAME"
 
 # Check if the script is already in the crontab
-if ! crontab -l | grep -q "$CRONTAB_ENTRY"; then
+if ! crontab -l | grep -q "$SCRIPT_NAME"; then
     echo "Do you want to add this script to your crontab to run daily at 2 AM? (y/n)"
     read choice
 
