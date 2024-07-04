@@ -1,6 +1,6 @@
 #! /bin/bash
 
-
+#tested on Ubuntu 22.04 in 2024
 
 
 apt-get -y update
