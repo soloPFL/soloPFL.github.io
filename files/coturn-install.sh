@@ -25,7 +25,8 @@ host=$hostinput
 
 echo "listening-port=3478" >> /etc/turnserver.conf
 echo "fingerprint" >> /etc/turnserver.conf
-echo "lt-cred-mech" >> /etc/turnserver.conf
+#2024 obsolete setting lt-cred-mech
+#echo "lt-cred-mech" >> /etc/turnserver.conf
 echo "use-auth-secret" >> /etc/turnserver.conf
 echo "static-auth-secret=$password" >> /etc/turnserver.conf
 echo "realm=$host" >> /etc/turnserver.conf
