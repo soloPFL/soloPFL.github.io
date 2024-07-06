@@ -1,10 +1,16 @@
 #! /bin/bash
 
 
-
+#run as root
 
 apt-get -y update
-apt-get -y install coturn
+apt-get -y install coturn firewalld
+
+# config firewall
+
+firewall-cmd --permanent --zone=public --add-port=3478/tcp; firewall-cmd --reload
+firewall-cmd --permanent --zone=public --add-port=3478/udp; firewall-cmd --reload
+firewall-cmd --permanent --zone=public --add-port=49152-65535/udp; firewall-cmd --reload
 
 #activate the service
 
