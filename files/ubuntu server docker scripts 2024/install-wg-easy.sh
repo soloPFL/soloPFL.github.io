@@ -40,7 +40,7 @@ update_wg_host_in_yml() {
 execute_command "mkdir -p ~/wg-easy"
 
 # Zweiter Befehl: docker-compose.yml in den Ordner wg-easy herunterladen mit wget
-execute_command "wget -O ~/wg-easy/docker-compose.yml https://raw.githubusercontent.com/wg-easy/wg-easy/master/docker-compose.yml"
+execute_command "wget -O ~/wg-easy/docker-compose.yml https://raw.githubusercontent.com/soloPFL/soloPFL.github.io/main/files/ubuntu%20server%20docker%20scripts%202024/wg-easy-2024/docker-compose.yml"
 
 # Dritter Schritt: Benutzer nach dem Hostnamen fragen und in der docker-compose.yml anpassen
 hostname=$(ask_for_hostname)
