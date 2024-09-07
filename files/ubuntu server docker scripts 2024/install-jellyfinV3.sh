@@ -15,6 +15,8 @@ services:
     image: jellyfin/jellyfin
     user: 1000:1000
     container_name: jellyfin
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     network_mode: "host"
     devices:
       - /dev/dri:/dev/dri
