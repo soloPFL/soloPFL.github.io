@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Verzeichnis erstellen
-mkdir -p ~/jellyfin/config ~/jellyfin/cache ~/jellyfin/media
+mkdir -p ./jellyfin/config ./jellyfin/cache ./jellyfin/media
 
 # Berechtigungen anpassen
-sudo chown -R 1000:1000 ~/jellyfin
+sudo chown -R 1000:1000 ./jellyfin
 
 # docker-compose.yml Datei erstellen
-cat <<EOF > ~/jellyfin/docker-compose.yml
+cat <<EOF > ./jellyfin/docker-compose.yml
 version: '3.8'
 
 services:
@@ -31,7 +31,7 @@ services:
       - 'host.docker.internal:host-gateway'
 EOF
 
-echo "docker-compose.yml Datei wurde in ~/jellyfin erstellt."
+echo "docker-compose.yml Datei wurde in ./jellyfin erstellt."
 
 # Docker Compose ausführen
-sudo docker compose -f ~/jellyfin/docker-compose.yml up --detach --pull always
+sudo docker compose -f ./jellyfin/docker-compose.yml up --detach --pull always
