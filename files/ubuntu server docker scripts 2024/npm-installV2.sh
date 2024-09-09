@@ -10,6 +10,8 @@ services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"    
     network_mode: host
     volumes:
       - ./data:/data
