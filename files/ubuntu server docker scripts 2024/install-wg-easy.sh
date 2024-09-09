@@ -50,3 +50,13 @@ update_wg_host_in_yml "$hostname"
 echo "Konfiguriere ein Passwort für die Weboberfläche nach dieser Anleitung:"
 echo "https://github.com/wg-easy/wg-easy/blob/master/How_to_generate_an_bcrypt_hash.md"
 
+# Benutzer fragen, ob wg-easy gestartet werden soll
+read -p "Passwort jetzt konfigurieren? (ja/nein): " START
+
+if [[ "$START" == "ja" ]]; then
+./wg-easy-pwgen.sh
+  echo "Passwort für die WG-EASY webGUI wurde konfiguriert."
+else
+  echo "Ok, bye!"
+fi
+
