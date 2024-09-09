@@ -20,5 +20,16 @@ DOCKER_COMPOSE_FILE="$HOME/wg-easy/docker-compose.yml"
 sed -i "/- PASSWORD_HASH/s/# //g" "$DOCKER_COMPOSE_FILE"
 sed -i "/- PASSWORD_HASH/s/=.*/=$HASH/g" "$DOCKER_COMPOSE_FILE"
 
+# Benutzer fragen, ob wg-easy gestartet werden soll
+read -p "Möchten Sie wg-easy jetzt starten? (ja/nein): " START
+
+if [[ "$START" == "ja" ]]; then
+  cd "$HOME/wg-easy"
+  docker compose up -d
+  echo "wg-easy wurde gestartet."
+else
+  echo "wg-easy wurde nicht gestartet."
+fi
+
 echo "Die Ausgabe wurde in wg-easy-hash.txt gespeichert und bearbeitet."
 echo "Die Datei $HOME/wg-easy/docker-compose.yml wurde ebenfalls bearbeitet."
