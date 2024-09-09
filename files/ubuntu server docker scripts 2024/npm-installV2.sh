@@ -26,3 +26,15 @@ cd ./npm
 sudo docker compose up -d
 
 echo "Ordner 'npm' und Datei 'docker-compose.yml' wurden erfolgreich erstellt und NPM wurde gestartet!"
+
+# Datei und Pfad definieren
+config_file="npmconfig.txt"
+
+# Konfigurationen in die Datei schreiben
+echo "client_body_buffer_size 512k;" > $config_file
+echo "proxy_read_timeout 86400s;" >> $config_file
+echo "client_max_body_size 0;" >> $config_file
+
+echo "Konfigurationen wurden in $config_file geschrieben. Bitte manuell in der GUI einfügen."
+echo ""
+cat $config_file
