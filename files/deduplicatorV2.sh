@@ -3,6 +3,11 @@
 # Verzeichnis, in dem nach Duplikaten gesucht werden soll
 directory="."
 
+# Gesamtanzahl der Dateien im Verzeichnis
+total_files=$(find "$directory" -type f | wc -l)
+processed_files=0
+duplicate_count=0
+
 # Finde Duplikate basierend auf Dateigröße und MD5-Hash
 find "$directory" -type f -exec md5sum {} + | sort | uniq -w32 -dD > duplicates.txt
 
@@ -23,6 +28,9 @@ if [ "$answer" == "j" ]; then
         file=$(echo "$line" | awk '{print $2}')
         rm "$file"
         echo "$file wurde gelöscht."
+        duplicate_count=$((duplicate_count + 1))
+        processed_files=$((processed_files + 1))
+        echo "Fortschritt: $processed_files/$total_files Dateien verarbeitet, $duplicate_count Duplikate gelöscht."
     done < duplicates.txt
 else
     echo "Keine Duplikate wurden gelöscht."
