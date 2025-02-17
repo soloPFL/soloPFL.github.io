@@ -91,6 +91,7 @@ configure_global_settings() {
     read -p "Enter Security mode (user/share) (default user): " security_mode
     security_mode=${security_mode:-user}
 
+    # Update or insert the [global] section with additional authentication parameters
     awk -v wg="$workgroup" -v ss="$server_string" -v nb="$netbios_name" -v sec="$security_mode" '
         BEGIN { in_global=0 }
         /^ *\[global\]/ {
@@ -99,6 +100,11 @@ configure_global_settings() {
             print "   server string = " ss;
             print "   netbios name = " nb;
             print "   security = " sec;
+            print "   encrypt passwords = yes";
+            print "   ntlm auth = yes";
+            print "   lanman auth = no";
+            print "   client ntlmv2 auth = yes";
+            print "   server min protocol = SMB2";
             in_global=1;
             next;
         }
@@ -108,6 +114,7 @@ configure_global_settings() {
 
     echo "Global settings updated."
 }
+
 
 ##############################
 # Share Management           #
