@@ -3,9 +3,11 @@
 # This script installs Samba (if needed) and provides a menu to configure shares,
 # adjust folder permissions, manage Samba users, and remove a share.
 #
-# In this version, default permissions are set so that only known Samba users can access
-# and edit the files. It also checks if any Samba user is configured and prompts you
-# to create one if none exist.
+# Default permissions are set so that only known, authenticated Samba users
+# may access and edit files. The script checks if any Samba user is configured
+# and prompts you to create one if none exist. Additionally, when creating a user,
+# you are prompted to set a password, and an option to edit a Samba user's password
+# is provided.
 
 # Ensure the script is run as root.
 if [ "$(id -u)" -ne 0 ]; then
@@ -57,11 +59,6 @@ add_share() {
   fi
 
   # Set secure directory permissions (0770) so that only the owner and group have access.
-  # If valid users were specified, attempt to set the group ownership to the first user.
-  if [ -n "$valid_users" ]; then
-    first_user=$(echo "$valid_users" | cut -d, -f1)
-    chown root:"$first_user" "$dirpath" 2>/dev/null
-  fi
   chmod 0770 "$dirpath"
 
   # Append share configuration to smb.conf with authentication required.
@@ -119,9 +116,44 @@ add_samba_user() {
       return
     fi
   fi
-  # Add the user to Samba. This will prompt for a Samba password.
-  smbpasswd -a "$username"
+  # Ask for Samba password.
+  while true; do
+    read -s -p "Enter Samba password for '$username': " password
+    echo
+    read -s -p "Confirm Samba password: " password_confirm
+    echo
+    if [ "$password" != "$password_confirm" ]; then
+      echo "Passwords do not match. Please try again."
+    else
+      break
+    fi
+  done
+  # Add the user to Samba using non-interactive mode.
+  echo -e "$password\n$password" | smbpasswd -a -s "$username"
   echo "Samba user '$username' added."
+}
+
+# Function to edit a Samba user's password.
+edit_samba_password() {
+  read -p "Enter the Samba username to edit the password: " username
+  # Check if the Samba user exists.
+  if ! pdbedit -L 2>/dev/null | grep -q "^$username:"; then
+    echo "Samba user '$username' does not exist."
+    return
+  fi
+  while true; do
+    read -s -p "Enter new password for '$username': " password
+    echo
+    read -s -p "Confirm new password: " password_confirm
+    echo
+    if [ "$password" != "$password_confirm" ]; then
+      echo "Passwords do not match. Please try again."
+    else
+      break
+    fi
+  done
+  echo -e "$password\n$password" | smbpasswd -s "$username"
+  echo "Password updated for user '$username'."
 }
 
 # Function to remove a Samba user.
@@ -149,20 +181,22 @@ menu() {
     echo "2. Remove a share"
     echo "3. Change share folder permissions"
     echo "4. Add Samba user"
-    echo "5. Remove Samba user"
-    echo "6. Restart Samba services"
-    echo "7. Exit"
+    echo "5. Edit Samba user password"
+    echo "6. Remove Samba user"
+    echo "7. Restart Samba services"
+    echo "8. Exit"
     echo "-----------------------------------"
-    read -p "Select an option [1-7]: " option
+    read -p "Select an option [1-8]: " option
 
     case $option in
       1) add_share ;;
       2) remove_share ;;
       3) change_permissions ;;
       4) add_samba_user ;;
-      5) remove_samba_user ;;
-      6) restart_samba ;;
-      7) echo "Exiting."; exit 0 ;;
+      5) edit_samba_password ;;
+      6) remove_samba_user ;;
+      7) restart_samba ;;
+      8) echo "Exiting."; exit 0 ;;
       *) echo "Invalid option. Please try again." ; sleep 2 ;;
     esac
     echo ""
