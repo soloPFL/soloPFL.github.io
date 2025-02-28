@@ -159,4 +159,4 @@ echo "Setting file permissions..."
 chmod +x update-root-hints.sh entrypoint.sh
 chmod 644 config/unbound.conf config/root.hints
 
-echo "Setup complete! Run 'docker-compose down && docker-compose up -d --build' to rebuild and start the container."
+echo "Setup complete! Run 'docker compose down && docker compose up -d --build' to rebuild and start the container."
