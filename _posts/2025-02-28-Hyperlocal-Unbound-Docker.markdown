@@ -11,7 +11,7 @@ categories: servers
 This guide will walk you through setting up an enhanced version of Unbound as a hyperlocal recursive DNS server using Docker. The setup includes detailed logging and debugging capabilities, making it easier to troubleshoot and maintain.
 
 ## Overview of the Script
-The script `working-fixed-unbound-script.sh` automates the creation of necessary files and configurations for running Unbound in Docker. Here’s what each part of the script does:
+The script `[working-fixed-unbound-script.sh](https://raw.githubusercontent.com/soloPFL/soloPFL.github.io/refs/heads/main/files/2025/working-fixed-unbound-script.sh)` automates the creation of necessary files and configurations for running Unbound in Docker. Here’s what each part of the script does:
 
 ### 1. **Create Necessary Directories**
    - The script creates a directory named `config` to store configuration files for Unbound.
